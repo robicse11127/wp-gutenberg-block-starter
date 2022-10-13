@@ -61,19 +61,19 @@ final class WP_Your_Class_Name {
      * Regsiter Block Editor Assets
      */
     public function register_block_editor_assets() {
-        wp_enqueue_script(
-            'prefix-wp-gutenberg-plugin-starter',
-            PREFIX_PLUGIN_URL . '/build/index.js',
-            [
-                'wp-blocks',
-                'wp-editor',
-                'wp-i18n',
-                'wp-element',
-                'wp-components',
-                'wp-data'
-            ]
 
-        );
+        $index_assets = PREFIX_PLUGIN_PATH . '/build/index.asset.php';
+
+        if ( file_exists( $index_assets ) ) {
+            $asstes = require_once $index_assets;
+            wp_enqueue_script(
+                'prefix-wp-gutenberg-plugin-starter',
+                PREFIX_PLUGIN_URL . '/build/index.js',
+                $asstes['dependencies'],
+                $asstes['version'],
+                true
+            );
+        }
     }
 
     /**
@@ -153,3 +153,9 @@ function prefix_run_plugin() {
 }
 // Run the plugin
 prefix_run_plugin();
+
+// Blocks.
+require_once PREFIX_PLUGIN_PATH . '/inc/blocks/index.php';
+
+// Patterns.
+require_once PREFIX_PLUGIN_PATH . '/inc/patterns/index.php';

@@ -18,6 +18,9 @@
   },
   "homepage": "https://github.com/robicse11127/wp-gutenberg-block-starter#readme",
   "devDependencies": {
+    "@wordpress/block-editor": "^10.2.0",
+    "@wordpress/components": "^21.2.0",
+    "@wordpress/element": "^4.17.0",
     "@wordpress/scripts": "^12.6.0"
   },
   "dependencies": {
