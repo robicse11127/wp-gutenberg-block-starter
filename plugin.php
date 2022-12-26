@@ -11,8 +11,6 @@ if( ! defined( 'ABSPATH' ) ) : exit(); endif;
 define( 'PREFIX_PLUGIN_PATH', trailingslashit( plugin_dir_path( __FILE__ ) ) );
 define( 'PREFIX_PLUGIN_URL', trailingslashit( plugins_url( '/', __FILE__ ) ) );
 
-// require_once PREFIX_PLUGIN_PATH . '/src/blocks/blocks.php';
-
 final class WP_Your_Class_Name {
 
     const VERSION = '1.0.0';
