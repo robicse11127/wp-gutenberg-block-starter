@@ -8,6 +8,11 @@
  */
 if( ! defined( 'ABSPATH' ) ) : exit(); endif;
 
+define( 'PREFIX_PLUGIN_PATH', trailingslashit( plugin_dir_path( __FILE__ ) ) );
+define( 'PREFIX_PLUGIN_URL', trailingslashit( plugins_url( '/', __FILE__ ) ) );
+
+// require_once PREFIX_PLUGIN_PATH . '/src/blocks/blocks.php';
+
 final class WP_Your_Class_Name {
 
     const VERSION = '1.0.0';
@@ -45,6 +50,9 @@ final class WP_Your_Class_Name {
      */
     public function init_plugin() {
         $this->enqueue_scripts();
+        $this->register_blocks();
+        $this->register_patterns();
+        add_filter( 'block_categories', [ $this, 'prefix_block_category' ], 10, 2);
     }
 
     /**
@@ -54,27 +62,12 @@ final class WP_Your_Class_Name {
         add_action( 'enqueue_block_editor_assets', [ $this, 'register_block_editor_assets' ] );
         add_action( 'admin_enqueue_scritps', [ $this, 'register_admin_scripts' ] );
         add_action( 'wp_enqueue_scritps', [ $this, 'register_public_scripts' ] );
-        add_action( 'init', [ $this, 'register_blocks' ] );
     }
 
     /**
      * Regsiter Block Editor Assets
      */
-    public function register_block_editor_assets() {
-
-        $index_assets = PREFIX_PLUGIN_PATH . '/build/index.asset.php';
-
-        if ( file_exists( $index_assets ) ) {
-            $asstes = require_once $index_assets;
-            wp_enqueue_script(
-                'prefix-wp-gutenberg-plugin-starter',
-                PREFIX_PLUGIN_URL . '/build/index.js',
-                $asstes['dependencies'],
-                $asstes['version'],
-                true
-            );
-        }
-    }
+    public function register_block_editor_assets() {}
 
     /**
      * Register Admin Scritps
@@ -120,29 +113,35 @@ final class WP_Your_Class_Name {
      * Register Blocks
      */
     public function register_blocks() {
-        register_block_type( 'prefix-blocks/block', [
-            'style'          => 'prefix-public',
-            'editor_style'   => 'prefix-editor',
-            'editor_scripts' => 'prefix-wp-gutenberg-plugin-starter'
-        ] );
+        $prefix_block_files = glob( PREFIX_PLUGIN_PATH . '/src/blocks/**/index.php' );
+
+        foreach( $prefix_block_files as $prefix_block ) {
+            require_once $prefix_block;
+        }
     }
 
     /**
-     *
+     * Register Patterns.
      */
+    public function register_patterns() {
+        require_once PREFIX_PLUGIN_PATH . '/inc/patterns/index.php';
+    }
 
-    function my_mario_block_category( $categories, $post ) {
+
+    /**
+     * Register custom block category.
+     */
+    public function prefix_block_category( $categories, $post ) {
         return array_merge(
             $categories,
             array(
                 array(
-                    'slug' => 'mario-blocks',
-                    'title' => __( 'Mario Blocks', 'mario-blocks' ),
+                    'slug' => 'prefix-blocks',
+                    'title' => __( 'Prefix Blocks', 'prefix-blocks' ),
                 ),
             )
         );
     }
-    // add_filter( 'block_categories', 'my_mario_block_category', 10, 2);
 }
 
 /**
@@ -153,9 +152,3 @@ function prefix_run_plugin() {
 }
 // Run the plugin
 prefix_run_plugin();
-
-// Blocks.
-require_once PREFIX_PLUGIN_PATH . '/inc/blocks/index.php';
-
-// Patterns.
-require_once PREFIX_PLUGIN_PATH . '/inc/patterns/index.php';

@@ -2,7 +2,6 @@
   "name": "wp-gutenberg-block-starter",
   "version": "1.0.0",
   "description": "A boilerplate to get started with WordPress Plugin Development",
-  "main": "index.js",
   "scripts": {
     "start": "wp-scripts start",
     "build": "wp-scripts build"
@@ -18,13 +17,12 @@
   },
   "homepage": "https://github.com/robicse11127/wp-gutenberg-block-starter#readme",
   "devDependencies": {
-    "@wordpress/block-editor": "^10.2.0",
-    "@wordpress/components": "^21.2.0",
-    "@wordpress/element": "^4.17.0",
-    "@wordpress/scripts": "^12.6.0"
+
   },
   "dependencies": {
-    "@wordpress/blocks": "^6.25.0",
-    "@wordpress/i18n": "^3.17.0"
+    "@wordpress/components": "^23.0.0",
+    "@wordpress/element": "^5.0.0",
+    "@wordpress/i18n": "^4.23.0",
+    "@wordpress/scripts": "^25.0.0"
   }
 }
